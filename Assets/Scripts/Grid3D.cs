@@ -8,6 +8,7 @@ public class Grid3D
 
     public Grid3D(int x, int y, int z)
     {
+        intersections = new Intersection[x, y, z];
         for(int i = 0; i < x; i++)
         {
             for (int j = 0; j < y; j++)

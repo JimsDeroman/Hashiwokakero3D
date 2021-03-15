@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6c635c3dd2328e443ae48b5fd2ee0e41
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Island: {fileID: 7708180402907328127, guid: e821beb6e2b045c4e8eaa16dd7e933a5,
+      type: 3}
+  - BridgeBlock: {fileID: 9029934836038954196, guid: e3b74a33b2298854c8219dafb1fdffd5,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

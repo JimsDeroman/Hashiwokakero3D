@@ -6,6 +6,8 @@ public class Bridge
 {
     private int axis; // 0 = none, 1 = x, 2 = y, 3 = z
 
+    private Island A, B;
+
     public int getAxis()
     {
         return axis;
@@ -16,8 +18,30 @@ public class Bridge
         axis = num;
     }
 
-    public Bridge(int axis)
+    public Island getA()
+    {
+        return A;
+    }
+
+    public void setA(Island i)
+    {
+        this.A = i;
+    }
+
+    public Island getB()
+    {
+        return B;
+    }
+
+    public void setB(Island i)
+    {
+        this.B = i;
+    }
+
+    public Bridge(int axis, Island A, Island B)
     {
         this.axis = axis;
+        this.A = A;
+        this.B = B;
     }
 }
