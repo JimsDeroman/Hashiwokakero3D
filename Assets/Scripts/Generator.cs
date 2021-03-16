@@ -44,7 +44,6 @@ public class Generator : MonoBehaviour
 
     // Todo lo de arriba, solucionado
      
-    // Ojo, funciona pero hay dos problemas hasta ahora: al final de los caminos (creo) aparecen puentes inconexos y tambien aparecen islas repetidas en algunas intersecciones (la primera en los caminos generados?)
     // Hay que pensar algo para los dobles puentes
 
     public void Awake()
@@ -159,7 +158,7 @@ public class Generator : MonoBehaviour
                     length = Random.Range(1, maxPossibleLength + 1);
 
                     grid.getIntersection(rX + length, rY, rZ).placeIsland();
-                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ);
+                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX + length, rY, rZ);
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX + length, rY, rZ).getIsland();
@@ -215,7 +214,7 @@ public class Generator : MonoBehaviour
                     length = Random.Range(1, maxPossibleLength + 1);
 
                     grid.getIntersection(rX - length, rY, rZ).placeIsland();
-                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ);
+                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX - length, rY, rZ);
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX - length, rY, rZ).getIsland();
@@ -271,7 +270,7 @@ public class Generator : MonoBehaviour
                     length = Random.Range(1, maxPossibleLength + 1);
 
                     grid.getIntersection(rX, rY + length, rZ).placeIsland();
-                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ);
+                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY + length, rZ);
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY + length, rZ).getIsland();
@@ -327,7 +326,7 @@ public class Generator : MonoBehaviour
                     length = Random.Range(1, maxPossibleLength + 1);
 
                     grid.getIntersection(rX, rY - length, rZ).placeIsland();
-                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ);
+                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY - length, rZ);
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY - length, rZ).getIsland();
@@ -383,7 +382,7 @@ public class Generator : MonoBehaviour
                     length = Random.Range(1, maxPossibleLength + 1);
 
                     grid.getIntersection(rX, rY, rZ + length).placeIsland();
-                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ);
+                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ + length);
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY, rZ + length).getIsland();
@@ -439,7 +438,7 @@ public class Generator : MonoBehaviour
                     length = Random.Range(1, maxPossibleLength + 1);
 
                     grid.getIntersection(rX, rY, rZ - length).placeIsland();
-                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ);
+                    PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ - length);
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY, rZ - length).getIsland();
