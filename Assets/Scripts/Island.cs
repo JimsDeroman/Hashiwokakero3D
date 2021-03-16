@@ -49,7 +49,12 @@ public class Island
 
     public int getCount()
     {
-        return bridgeList.Count();
+        int count = 0;
+        foreach (Bridge b in bridgeList)
+        {
+            count += b.isDoble() ? 2 : 1;
+        }
+        return count;
     }
 
     /* If Island class gets MonoBehaviour, editor crushes D:
