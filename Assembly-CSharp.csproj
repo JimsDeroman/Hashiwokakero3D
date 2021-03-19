@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Intersection.cs" />
     <Compile Include="Assets\Scripts\Island.cs" />
     <Compile Include="Assets\Scripts\PositionGrid.cs" />
+    <Compile Include="Assets\Scripts\TouchManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -685,7 +686,12 @@
       <HintPath>C:/Users/Jaime/Hashiwokakero3D/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup></ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="OEBIF.csproj">
+      <Project>{7B6D1DED-4813-D6CD-364E-A3565404A3B9}</Project>
+      <Name>OEBIF</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

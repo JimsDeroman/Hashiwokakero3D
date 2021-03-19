@@ -5,6 +5,8 @@ using TMPro;
 
 public class Generator : MonoBehaviour
 {
+    private int dimension;
+
     private Grid3D grid;
 
     private List<Bridge> bridgeList;
@@ -41,24 +43,46 @@ public class Generator : MonoBehaviour
 
     // Next: Cambiar el sistema de bridges. 
 
-
     // Todo lo de arriba, solucionado
      
     // Hay que pensar algo para los dobles puentes
+
+    // Algo he jodido haciendo lo de los puentes, ahora el generator va chungo, hay que comparar a ver como estaba antes (solucionado, borre el 10 del failed sin querer y puse un uno :D)
+
 
     public void Awake()
     {
         // Para inicializar objetos y evitar errores de llamadas a inexistentes, prueba a borrar esto cuando la cosa este acabada
         bridgeLines = new List<GameObject>();
+        dimension = 3;
     }
 
     public void Start()
     {
-        generate(3);
+        generate();
     }
 
+    public void addBridge(Bridge b)
+    {
+        bridgeList.Add(b);
+    }
 
-    public void generate(int dimension)
+    public List<Bridge> getBridgeList()
+    {
+        return bridgeList;
+    }
+
+    public Grid3D getGrid()
+    {
+        return grid;
+    }
+
+    public Island getIsland(int x, int y, int z)
+    {
+        return grid.getIntersection(x, y, z).getIsland();
+    }
+
+    public void generate()
     {
         // Creamos el grid de la dimension dada (es siempre un cubo)
         grid = new Grid3D(dimension, dimension, dimension);
@@ -74,7 +98,7 @@ public class Generator : MonoBehaviour
         grid.getIntersection(rX, rY, rZ).placeIsland();
         PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ);
 
-        generateNewFromIntersection(rX, rY, rZ, dimension);
+        generateNewFromIntersection(rX, rY, rZ);
 
         Debug.Log("Camino generado");
 
@@ -87,7 +111,7 @@ public class Generator : MonoBehaviour
 
         Debug.Log("La isla elegida esta en: " + rX + rY + rZ);
 
-        generateNewFromIntersection(rX, rY, rZ, dimension);
+        generateNewFromIntersection(rX, rY, rZ);
 
         Debug.Log("Nuevo camino generado");
 
@@ -103,27 +127,29 @@ public class Generator : MonoBehaviour
 
         // Echar cuentas
 
-        calculateNeededBridges(dimension);
+        calculateNeededBridges();
 
         Debug.Log("Calculados los bridges");
 
         // Borar todos los puentes
 
-        //deleteAllBridges(dimension);
+        deleteAllBridges();
 
-        //Debug.Log("A tomar por culo los bridegs");
+        Debug.Log("A tomar por culo los bridges");
 
         // Y ya debería estar. Reza para debugear esta mierda. God bless pao
     }
 
     
-    private void generateNewFromIntersection(int rX, int rY, int rZ, int dimension)
+    private void generateNewFromIntersection(int rX, int rY, int rZ)
     {
         grid.getIntersection(rX, rY, rZ);
 
         int direction; // shufflear el array e ir sacando de ahi los numeros? Creo que no
 
         int aux, length = 0, maxPossibleLength = 0, bridges, failed = 0;
+
+        bool doble;
 
         Island a, b;
         Bridge auxBridge;
@@ -133,6 +159,7 @@ public class Generator : MonoBehaviour
 
            
             bridges = Random.Range(1, 3);
+            doble = bridges > 1 ? true : false;
             direction = Random.Range(0, 6);
 
             // +x
@@ -163,18 +190,11 @@ public class Generator : MonoBehaviour
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX + length, rY, rZ).getIsland();
 
-                    auxBridge = new Bridge(1, a, b);
+                    auxBridge = new Bridge(1, a, b, doble);
 
                     bridgeList.Add(auxBridge);
                     a.addBridge(auxBridge);
                     b.addBridge(auxBridge);
-
-                    if (bridges > 1)
-                    {
-                        bridgeList.Add(auxBridge);
-                        a.addBridge(auxBridge);
-                        b.addBridge(auxBridge);
-                    }
                     
                     do
                     {
@@ -219,18 +239,11 @@ public class Generator : MonoBehaviour
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX - length, rY, rZ).getIsland();
 
-                    auxBridge = new Bridge(1, a, b);
+                    auxBridge = new Bridge(1, a, b, doble);
 
                     bridgeList.Add(auxBridge);
                     a.addBridge(auxBridge);
                     b.addBridge(auxBridge);
-
-                    if (bridges > 1)
-                    {
-                        bridgeList.Add(auxBridge);
-                        a.addBridge(auxBridge);
-                        b.addBridge(auxBridge);
-                    }
 
                     do
                     {
@@ -275,18 +288,11 @@ public class Generator : MonoBehaviour
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY + length, rZ).getIsland();
 
-                    auxBridge = new Bridge(1, a, b);
+                    auxBridge = new Bridge(2, a, b, doble);
 
                     bridgeList.Add(auxBridge);
                     a.addBridge(auxBridge);
                     b.addBridge(auxBridge);
-
-                    if (bridges > 1)
-                    {
-                        bridgeList.Add(auxBridge);
-                        a.addBridge(auxBridge);
-                        b.addBridge(auxBridge);
-                    }
 
                     do
                     {
@@ -331,18 +337,11 @@ public class Generator : MonoBehaviour
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY - length, rZ).getIsland();
 
-                    auxBridge = new Bridge(1, a, b);
+                    auxBridge = new Bridge(2, a, b, doble);
 
                     bridgeList.Add(auxBridge);
                     a.addBridge(auxBridge);
                     b.addBridge(auxBridge);
-
-                    if (bridges > 1)
-                    {
-                        bridgeList.Add(auxBridge);
-                        a.addBridge(auxBridge);
-                        b.addBridge(auxBridge);
-                    }
 
                     do
                     {
@@ -387,18 +386,11 @@ public class Generator : MonoBehaviour
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY, rZ + length).getIsland();
 
-                    auxBridge = new Bridge(1, a, b);
+                    auxBridge = new Bridge(3, a, b, doble);
 
                     bridgeList.Add(auxBridge);
                     a.addBridge(auxBridge);
                     b.addBridge(auxBridge);
-
-                    if (bridges > 1)
-                    {
-                        bridgeList.Add(auxBridge);
-                        a.addBridge(auxBridge);
-                        b.addBridge(auxBridge);
-                    }
 
                     do
                     {
@@ -443,18 +435,11 @@ public class Generator : MonoBehaviour
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY, rZ - length).getIsland();
 
-                    auxBridge = new Bridge(1, a, b);
+                    auxBridge = new Bridge(3, a, b, doble);
 
                     bridgeList.Add(auxBridge);
                     a.addBridge(auxBridge);
                     b.addBridge(auxBridge);
-
-                    if (bridges > 1)
-                    {
-                        bridgeList.Add(auxBridge);
-                        a.addBridge(auxBridge);
-                        b.addBridge(auxBridge);
-                    }
 
                     do
                     {
@@ -474,7 +459,7 @@ public class Generator : MonoBehaviour
     }
 
 
-    public void calculateNeededBridges(int dimension)
+    public void calculateNeededBridges()
     {
         int count;
         for (int i = 0; i < dimension; i++)
@@ -505,19 +490,70 @@ public class Generator : MonoBehaviour
     public void printAllBridges()
     {
         bridgeLines = new List<GameObject>();
-
+        Vector3 A, B;
         int aux = 0;
         foreach(Bridge b in bridgeList)
         {
             bridgeLines.Add(Instantiate(line, BridgeLines.transform));
             // Tremendo lio para pillar las positions tio
-            bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, GameObject.Find("PositionGrid").GetComponent<PositionGrid>().getPosition(b.getA().getIntersection().getCoordinates()).transform.position);
-            bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, GameObject.Find("PositionGrid").GetComponent<PositionGrid>().getPosition(b.getB().getIntersection().getCoordinates()).transform.position);
+            A = GameObject.Find("PositionGrid").GetComponent<PositionGrid>().getPosition(b.getA().getIntersection().getCoordinates()).transform.position;
+            B = GameObject.Find("PositionGrid").GetComponent<PositionGrid>().getPosition(b.getB().getIntersection().getCoordinates()).transform.position;
+            if (b.isDoble())
+            {
+                if (b.getAxis() == 1) //x
+                {
+                    A.z += 0.2f;
+                    B.z += 0.2f;
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, A);
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, B);
+                    aux++;
+                    bridgeLines.Add(Instantiate(line, BridgeLines.transform));
+                    A.z -= 0.4f;
+                    B.z -= 0.4f;
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, A);
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, B);
+                }
+                else if (b.getAxis() == 2) //y
+                {
+                    A.x += 0.2f;
+                    B.x += 0.2f;
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, A);
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, B);
+                    aux++;
+                    bridgeLines.Add(Instantiate(line, BridgeLines.transform));
+                    A.x -= 0.4f;
+                    B.x -= 0.4f;
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, A);
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, B);
+                }
+                else if (b.getAxis() == 3) //z
+                {
+                    A.x += 0.2f;
+                    B.x += 0.2f;
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, A);
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, B);
+                    aux++;
+                    bridgeLines.Add(Instantiate(line, BridgeLines.transform));
+                    A.x -= 0.4f;
+                    B.x -= 0.4f;
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, A);
+                    bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, B);
+                }
+                else
+                {
+                    Debug.LogError("No axis bridge");
+                }
+            }
+            else
+            {
+                bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(0, A);
+                bridgeLines[aux].GetComponent<LineRenderer>().SetPosition(1, B);
+            }
             aux++;
         }
     }
 
-    public void deleteAllBridges(int dimension)
+    public void deleteAllBridges()
     {
         for (int i = 0; i < dimension; i++)
         {
@@ -536,5 +572,11 @@ public class Generator : MonoBehaviour
         {
             Destroy(g);
         }
+    }
+
+    public void updateBridges()
+    {
+        deleteAllBridges();
+        printAllBridges();
     }
 }
