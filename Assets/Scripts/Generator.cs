@@ -55,6 +55,9 @@ public class Generator : MonoBehaviour
         // Para inicializar objetos y evitar errores de llamadas a inexistentes, prueba a borrar esto cuando la cosa este acabada
         bridgeLines = new List<GameObject>();
         dimension = 3;
+
+        // Creamos el grid de la dimension dada (es siempre un cubo), esto tiene que ir en awake para que el touch manager lo encuentre antes??
+        grid = new Grid3D(dimension, dimension, dimension);
     }
 
     public void Start()
@@ -65,6 +68,16 @@ public class Generator : MonoBehaviour
     public void addBridge(Bridge b)
     {
         bridgeList.Add(b);
+    }
+
+    public void addBridge(Island a, Island b, int axis)
+    {
+        Bridge bridge = new Bridge(axis, a, b, false);
+        // FaLsE?!?!??!?!
+        Debug.Log(a.getNeededBridges() + " " + b.getNeededBridges());
+        a.addBridge(bridge);
+        b.addBridge(bridge);
+        bridgeList.Add(bridge);
     }
 
     public List<Bridge> getBridgeList()
@@ -84,9 +97,6 @@ public class Generator : MonoBehaviour
 
     public void generate()
     {
-        // Creamos el grid de la dimension dada (es siempre un cubo)
-        grid = new Grid3D(dimension, dimension, dimension);
-
         // Inicializamos la lista de bridges
         bridgeList = new List<Bridge>();
 
@@ -133,7 +143,7 @@ public class Generator : MonoBehaviour
 
         // Borar todos los puentes
 
-        deleteAllBridges();
+        //deleteAllBridges();
 
         Debug.Log("A tomar por culo los bridges");
 
@@ -553,6 +563,14 @@ public class Generator : MonoBehaviour
         }
     }
 
+    public void unprintAllBridges()
+    {
+        foreach (GameObject g in bridgeLines)
+        {
+            Destroy(g);
+        }
+    }
+
     public void deleteAllBridges()
     {
         for (int i = 0; i < dimension; i++)
@@ -574,9 +592,19 @@ public class Generator : MonoBehaviour
         }
     }
 
+    public void setDobleBridge(int index)
+    {
+        bridgeList[index].setDoble(true);
+    }
+
+    public void deleteBridge(int index)
+    {
+        bridgeList.RemoveAt(index);
+    }
+
     public void updateBridges()
     {
-        deleteAllBridges();
+        unprintAllBridges();
         printAllBridges();
     }
 }

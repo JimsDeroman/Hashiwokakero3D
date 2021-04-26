@@ -36,6 +36,7 @@ public class Intersection
         this.z = z;
 
         this.island = null;
+        this.bridged = false;
     }
 
     public bool hasIsland()
@@ -45,7 +46,7 @@ public class Intersection
 
     public bool isEmptY()
     {
-        return (island != null || bridged) ? false : true;
+        return (island == null && !bridged) ? true : false;
     }
 
     public void placeIsland()
@@ -55,7 +56,7 @@ public class Intersection
 
     public Island getIsland()
     {
-        return island;
+        return this.island;
     }
 
     public void setIslandNumber(int num)
