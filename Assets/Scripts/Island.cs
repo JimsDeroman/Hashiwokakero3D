@@ -11,6 +11,18 @@ public class Island
 
     private int neededBridges;
 
+    private bool visited;
+
+    public bool isVisited()
+    {
+        return visited;
+    }
+
+    public void setVisited(bool b)
+    {
+        visited = b;
+    }
+
     public Intersection getIntersection()
     {
         return intersection;
@@ -67,6 +79,11 @@ public class Island
     public void clearBridges()
     {
         bridgeList = new List<Bridge>();
+    }
+
+    public List<Bridge> getBridgeList()
+    {
+        return bridgeList;
     }
 
     public int getCount()

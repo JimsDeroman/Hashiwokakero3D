@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Generator : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Generator : MonoBehaviour
     public GameObject line, BridgeLines;
 
     public GameObject VictoryPanel;
+
+    public Text notInterconnectedWarning;
 
     public void Awake()
     {
@@ -628,8 +631,100 @@ public class Generator : MonoBehaviour
         if (victory)
         {
             // Hay que checkear si estan interconectados todos los puentes
-            Debug.Log("You won!");
-            VictoryPanel.SetActive(true);
+            if (interconnectedBridges())
+            {
+                Debug.Log("Real victory");
+                VictoryPanel.SetActive(true);
+            }
+            else
+            {
+                StartCoroutine(showNotInterconnectedWarning());
+            }
         }
     }
+
+    IEnumerator showNotInterconnectedWarning()
+    {
+        notInterconnectedWarning.gameObject.SetActive(true);
+        yield return new WaitForSeconds(5);
+        notInterconnectedWarning.gameObject.SetActive(false);
+    }
+
+    private void unvisitIslands()
+    {
+        for (int i = 0; i < dimension; i++)
+        {
+            for (int j = 0; j < dimension; j++)
+            {
+                for (int k = 0; k < dimension; k++)
+                {
+                    if (grid.getIntersection(i, j, k).hasIsland()) grid.getIntersection(i, j, k).getIsland().setVisited(false);
+                }
+            }
+        }
+    }
+
+    private bool interconnectedBridges()
+    {
+        unvisitIslands();
+        int rX, rY, rZ;
+        // Elegimos una interseccion que contenga una isla creada en el camino anterior para generar un nuevo camino a partir de esa isla (deberiamos repetir este paso? cuantas veces? De momento se ejecuta una sola vez)
+        while (true)
+        {
+            rX = Random.Range(0, dimension); rY = Random.Range(0, dimension); rZ = Random.Range(0, dimension);
+            if (grid.getIntersection(rX, rY, rZ).hasIsland()) break;
+        }
+        dfsVisited(grid.getIntersection(rX, rY, rZ).getIsland());
+
+        return checkIfFullyConnected();
+    }
+
+    private void dfsVisited(Island island)
+    {
+        island.setVisited(true);
+        foreach(Bridge b in island.getBridgeList())
+        {
+            if (b.getA().getIntersection().getCoordinates().Equals(island.getIntersection().getCoordinates()))
+            {
+                if (!b.getB().isVisited())
+                {
+                    dfsVisited(b.getB());
+                }
+                
+            }
+            else
+            {
+                if (!b.getA().isVisited())
+                {
+                    dfsVisited(b.getA());
+                }
+                
+            }
+        }
+    }
+
+    private bool checkIfFullyConnected()
+    {
+        bool result = true;
+        for (int i = 0; i < dimension; i++)
+        {
+            for (int j = 0; j < dimension; j++)
+            {
+                for (int k = 0; k < dimension; k++)
+                {
+                    if (grid.getIntersection(i, j, k).hasIsland())
+                    {
+                        if (!grid.getIntersection(i, j, k).getIsland().isVisited())
+                        {
+                            result = false;
+                        }
+                        
+                    }
+                        
+                }
+            }
+        }
+        return result;
+    }
+    
 }
