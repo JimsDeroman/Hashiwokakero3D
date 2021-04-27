@@ -42,6 +42,28 @@ public class Island
         bridgeList.Add(b);
     }
 
+    public void deleteBridge(Bridge bridge)
+    {
+        Debug.Log("Islands delete Bridge begins");
+        string sCoordinatesA = bridge.getA().getIntersection().getCoordinates();
+        string sCoordinatesB = bridge.getB().getIntersection().getCoordinates();
+
+        int index = 0;
+        foreach (Bridge b in bridgeList)
+        {
+            if ((b.getA().getIntersection().getCoordinates().Equals(sCoordinatesA) && b.getB().getIntersection().getCoordinates().Equals(sCoordinatesB)) || (b.getA().getIntersection().getCoordinates().Equals(sCoordinatesB) && b.getB().getIntersection().getCoordinates().Equals(sCoordinatesA)))
+            {
+                Debug.Log("Encontrado el puente en el island");
+                break;
+            }
+
+            index++;
+        }
+        Debug.Log(bridgeList.Count + " " + index);
+        bridgeList.RemoveAt(index);
+        Debug.Log("Deleted from Island");
+    }
+
     public void clearBridges()
     {
         bridgeList = new List<Bridge>();

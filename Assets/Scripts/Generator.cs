@@ -17,38 +17,7 @@ public class Generator : MonoBehaviour
 
     public GameObject line, BridgeLines;
 
-    //private int[] directions = { 0, 1, 2, 3, 4, 5 };
-
-    // TODO LO QUE HAS HECHO ES UNA MIERDA PORQUE TU SISTEMA NO PERMITE CONECTAR DOS ISLAS ADYACENTES
-    // ME CAGO EN LA PUTA QUE TONTO
-
-
-    // Ahora mas tranqui, seguro que tiene solucion y estas tremendas casi 400 lineas de genius code tienen algun uso, piensalo bien y no te chines con el proyecto
-    // Pero te paso el marron, pao del futuro, el pao de hoy ya ha hecho bastante
-
-    // Hay que volver al plan de darle poder a los bridges:
-    // Cada uno con sus dos atributos de sus correspondientes islas
-
-    // Cuidado que no esta maaal colega, los bridges en las intersecciones te permiten chequear mas facilmente si hay colision, si se puede tirar nuevo bridge o no. Sin embargo, para hacer la cuenta
-    // de las islands y para representarlo graficamente, es mejor jugar con una lista<bridge> yo creo
-
-    // Pues ese es el plan:
-    // 1. El generator, al crear bridges, debe incluirlos en una lista (los bridges incluyen como atributos sus dos islas de conexion)
-    // 2. Hay que hacer un calculateAdjacentBridgeBlocks() totalmente nuevo
-    // 3. Cada Isla tiene asociados también sus bridges en una lista como atributo
-
-    // Ya parece estar todo (jajajaja, muy optimista tú), queda implementarlo visualmente en unity y diseñar un sistema de control. Luego ya vendrá tremenda testing shit, que buena falta le va a hacer
-
-    // Ya está todo MÁS O MENOS montado, falta la representacion de puentes, pero el algoritmo de generacion no funciona bien. Creo que tiene que ver con el calculo de distancias y tal
-
-    // Next: Cambiar el sistema de bridges. 
-
-    // Todo lo de arriba, solucionado
-     
-    // Hay que pensar algo para los dobles puentes
-
-    // Algo he jodido haciendo lo de los puentes, ahora el generator va chungo, hay que comparar a ver como estaba antes (solucionado, borre el 10 del failed sin querer y puse un uno :D)
-
+    public GameObject VictoryPanel;
 
     public void Awake()
     {
@@ -65,6 +34,11 @@ public class Generator : MonoBehaviour
         generate();
     }
 
+    public int getDimension()
+    {
+        return dimension;
+    }
+
     public void addBridge(Bridge b)
     {
         bridgeList.Add(b);
@@ -73,8 +47,6 @@ public class Generator : MonoBehaviour
     public void addBridge(Island a, Island b, int axis)
     {
         Bridge bridge = new Bridge(axis, a, b, false);
-        // FaLsE?!?!??!?!
-        Debug.Log(a.getNeededBridges() + " " + b.getNeededBridges());
         a.addBridge(bridge);
         b.addBridge(bridge);
         bridgeList.Add(bridge);
@@ -143,7 +115,7 @@ public class Generator : MonoBehaviour
 
         // Borar todos los puentes
 
-        //deleteAllBridges();
+        deleteAllBridges();
 
         Debug.Log("A tomar por culo los bridges");
 
@@ -606,5 +578,58 @@ public class Generator : MonoBehaviour
     {
         unprintAllBridges();
         printAllBridges();
+    }
+
+    public Material Incomplete, Complete, TooMuch;
+
+    public void check()
+    {
+        Intersection intersection;
+        Island island;
+        int neededBridges, actualBridges;
+        bool victory = true;
+        GameObject IslandClone;
+        for (int i = 0; i < dimension; i++)
+        {
+            for (int j = 0; j < dimension; j++)
+            {
+                for (int k = 0; k < dimension; k++)
+                {
+                    intersection = grid.getIntersection(i, j, k);
+                    if (intersection.hasIsland())
+                    {
+                        island = intersection.getIsland();
+                        actualBridges = island.getCount();
+                        neededBridges = island.getNeededBridges();
+                        if (actualBridges > neededBridges)
+                        {
+                            // Too much
+                            victory = false;
+                            IslandClone = GameObject.Find("PositionGrid/" + intersection.getCoordinates() + "/Island(Clone)");
+                            IslandClone.GetComponent<MeshRenderer>().material = TooMuch;
+                        }
+                        else if (actualBridges == neededBridges)
+                        {
+                            // Complete
+                            IslandClone = GameObject.Find("PositionGrid/" + intersection.getCoordinates() + "/Island(Clone)");
+                            IslandClone.GetComponent<MeshRenderer>().material = Complete;
+                        }
+                        else
+                        {
+                            // Uncomplete
+                            victory = false;
+                            IslandClone = GameObject.Find("PositionGrid/" + intersection.getCoordinates() + "/Island(Clone)");
+                            IslandClone.GetComponent<MeshRenderer>().material = Incomplete;
+                        }
+                    }
+                }
+            }
+        }
+        if (victory)
+        {
+            // Hay que checkear si estan interconectados todos los puentes
+            Debug.Log("You won!");
+            VictoryPanel.SetActive(true);
+        }
     }
 }
