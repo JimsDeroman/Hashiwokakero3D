@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/TwoRaccoons.unity
+    guid: 0bda7eaa6b9003440a4236c2a9a3c45b
+  - enabled: 1
     path: Assets/Scenes/Start.unity
     guid: c446feb6694000c4db692f27174aa524
   - enabled: 1
