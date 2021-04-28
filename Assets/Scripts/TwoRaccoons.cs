@@ -25,7 +25,7 @@ public class TwoRaccoons : MonoBehaviour
             Name.color = c;
             yield return new WaitForSeconds(0.1f);
         }
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         SceneManager.LoadScene("Start", LoadSceneMode.Single);
     }
 }

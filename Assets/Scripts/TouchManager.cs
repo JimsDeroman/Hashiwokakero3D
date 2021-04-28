@@ -12,6 +12,8 @@ public class TouchManager : MonoBehaviour
 
     private Grid3D grid;
 
+    private Vector2 vector;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,10 +24,10 @@ public class TouchManager : MonoBehaviour
 
     void Update()
     {
-        mouseUpdate();
+        //mouseUpdate();
         touchUpdate();
     }
-    
+
     // Finished! Sloppy, but works
     private void mouseUpdate()
     {
@@ -185,7 +187,7 @@ public class TouchManager : MonoBehaviour
                                 {
                                     // Yes, there is a double bridge here
                                     // ENDING: Then we delete the bridge and then deselect
-                                    
+
                                     string aName = selectedA.transform.parent.name;
                                     string bName = hit.transform.parent.name;
 
@@ -411,7 +413,7 @@ public class TouchManager : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Ended)
+            if (touch.phase == TouchPhase.Began)
             {
                 ray = Camera.main.ScreenPointToRay(touch.position);
 
@@ -781,6 +783,7 @@ public class TouchManager : MonoBehaviour
                     }
                 }
                 generator.check();
+
             }
         }
     }

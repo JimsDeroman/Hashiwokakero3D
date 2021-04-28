@@ -8,6 +8,8 @@ public class UIButtons : MonoBehaviour
 {
     public GameObject panel;
 
+    public Generator generator;
+
     public void openMenu()
     {
         panel.SetActive(true);
@@ -21,6 +23,17 @@ public class UIButtons : MonoBehaviour
     public void newGame()
     {
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    public void clear()
+    {
+        generator.deleteAllBridges();
+        closeMenu();
+    }
+
+    public void toOptions()
+    {
+        SceneManager.LoadScene("Options", LoadSceneMode.Single);
     }
 
     public void toStart()
