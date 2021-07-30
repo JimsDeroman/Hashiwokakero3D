@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Generator : MonoBehaviour
 {
+    public GameObject loadingPanel;
+
     private int dimension;
 
     private Grid3D grid;
@@ -22,7 +25,46 @@ public class Generator : MonoBehaviour
 
     public Text notInterconnectedWarning;
 
+    private int islandNum;
+
+    public GameObject RegularLights;
+
+    public GameObject ColoredLights;
+
+    private bool lights;
+
     public void Awake()
+    {
+        if (PlayerPrefs.GetInt("lights") == 0) lights = false;
+        else lights = true;
+        setLights();
+        init();
+        StartCoroutine(closeLoadingPanel());
+    }
+
+    public void setLights()
+    {
+        ColoredLights.SetActive(lights);
+        RegularLights.SetActive(!lights);
+
+    }
+
+    public void changeLights()
+    {
+        if (PlayerPrefs.GetInt("lights") == 0) PlayerPrefs.SetInt("lights", 1);
+        else PlayerPrefs.SetInt("lights", 0);
+        lights = !lights;
+        setLights();
+
+    }
+
+    IEnumerator closeLoadingPanel()
+    {
+        yield return new WaitForSeconds(0.5f);
+        loadingPanel.SetActive(false);
+    }
+
+    private void init()
     {
         // Para inicializar objetos y evitar errores de llamadas a inexistentes, prueba a borrar esto cuando la cosa este acabada
         bridgeLines = new List<GameObject>();
@@ -34,7 +76,22 @@ public class Generator : MonoBehaviour
 
     public void Start()
     {
-        generate();
+        switch (PlayerPrefs.GetInt("dificulty"))
+        {
+            case 1:
+                generateEasy();
+                break;
+            case 2:
+                generateMedium();
+                break;
+            case 3:
+                generateHard();
+                break;
+            default:
+                Debug.LogError("Wrong difficulty sent (PlayerPrefs)");
+                generate();
+                break;
+        }
     }
 
     public int getDimension()
@@ -70,8 +127,32 @@ public class Generator : MonoBehaviour
         return grid.getIntersection(x, y, z).getIsland();
     }
 
+    private void generateEasy()
+    {
+        init();
+        generate();
+        if (islandNum < 6 || islandNum > 9) SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    private void generateMedium()
+    {
+        init();
+        generate();
+        if (islandNum < 12 || islandNum > 18) SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    private void generateHard()
+    {
+        init();
+        generate();
+        if (islandNum < 23) SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
     public void generate()
     {
+        // Island num init
+        islandNum = 1;
+
         // Inicializamos la lista de bridges
         bridgeList = new List<Bridge>();
 
@@ -123,6 +204,8 @@ public class Generator : MonoBehaviour
         Debug.Log("A tomar por culo los bridges");
 
         // Y ya debería estar. Reza para debugear esta mierda. God bless pao
+
+
     }
 
     
@@ -132,14 +215,31 @@ public class Generator : MonoBehaviour
 
         int direction; // shufflear el array e ir sacando de ahi los numeros? Creo que no
 
-        int aux, length = 0, maxPossibleLength = 0, bridges, failed = 0;
+        int aux, length = 0, maxPossibleLength = 0, bridges, failed = 0, maxFailed;
+
+        switch (PlayerPrefs.GetInt("dificulty"))
+        {
+            case 1:
+                maxFailed = 2;
+                break;
+            case 2:
+                maxFailed = 7;
+                break;
+            case 3:
+                maxFailed = 15;
+                break;
+            default:
+                Debug.LogError("Wrong difficulty sent (PlayerPrefs)");
+                maxFailed = 10;
+                break;
+        }
 
         bool doble;
 
         Island a, b;
         Bridge auxBridge;
 
-        while (failed < 10)
+        while (failed < maxFailed)
         {
 
            
@@ -171,6 +271,7 @@ public class Generator : MonoBehaviour
 
                     grid.getIntersection(rX + length, rY, rZ).placeIsland();
                     PositionGrid.GetComponent<PositionGrid>().setIsland(rX + length, rY, rZ);
+                    islandNum++;
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX + length, rY, rZ).getIsland();
@@ -220,6 +321,7 @@ public class Generator : MonoBehaviour
 
                     grid.getIntersection(rX - length, rY, rZ).placeIsland();
                     PositionGrid.GetComponent<PositionGrid>().setIsland(rX - length, rY, rZ);
+                    islandNum++;
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX - length, rY, rZ).getIsland();
@@ -269,6 +371,7 @@ public class Generator : MonoBehaviour
 
                     grid.getIntersection(rX, rY + length, rZ).placeIsland();
                     PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY + length, rZ);
+                    islandNum++;
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY + length, rZ).getIsland();
@@ -318,6 +421,7 @@ public class Generator : MonoBehaviour
 
                     grid.getIntersection(rX, rY - length, rZ).placeIsland();
                     PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY - length, rZ);
+                    islandNum++;
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY - length, rZ).getIsland();
@@ -367,6 +471,7 @@ public class Generator : MonoBehaviour
 
                     grid.getIntersection(rX, rY, rZ + length).placeIsland();
                     PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ + length);
+                    islandNum++;
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY, rZ + length).getIsland();
@@ -416,6 +521,7 @@ public class Generator : MonoBehaviour
 
                     grid.getIntersection(rX, rY, rZ - length).placeIsland();
                     PositionGrid.GetComponent<PositionGrid>().setIsland(rX, rY, rZ - length);
+                    islandNum++;
 
                     a = grid.getIntersection(rX, rY, rZ).getIsland();
                     b = grid.getIntersection(rX, rY, rZ - length).getIsland();

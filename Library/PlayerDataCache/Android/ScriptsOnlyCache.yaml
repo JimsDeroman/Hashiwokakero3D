@@ -88,9 +88,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12976}
     - Class: 114
-      Script: {instanceID: 13144}
+      Script: {instanceID: 13142}
     - Class: 114
-      Script: {instanceID: 13252}
+      Script: {instanceID: 13250}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -147,7 +147,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12960}
     - Class: 114
-      Script: {instanceID: 13252}
+      Script: {instanceID: 13250}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -200,7 +200,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12960}
     - Class: 114
-      Script: {instanceID: 13252}
+      Script: {instanceID: 13250}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -261,9 +261,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13038}
     - Class: 114
-      Script: {instanceID: 13152}
+      Script: {instanceID: 13150}
     - Class: 114
-      Script: {instanceID: 13252}
+      Script: {instanceID: 13250}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -787,7 +787,7 @@ ScriptsOnlyBuild:
     className: Benchmark04
   - hash:
       serializedVersion: 2
-      Hash: 6ce4deb854e98cd3bcbc5a0211ecc61f
+      Hash: dcdb4537936c6e57a667da3dbebc24d6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Generator
@@ -995,4 +995,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Start.unity
   - Assets/Scenes/Game.unity
   - Assets/Scenes/Options.unity
-  playerPath: C:/Users/Jaime/Desktop/hashi3d_0.5.apk
+  playerPath: C:/Users/Usuario/Desktop/hashi3d.apk

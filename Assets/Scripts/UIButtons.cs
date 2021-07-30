@@ -20,9 +20,27 @@ public class UIButtons : MonoBehaviour
         panel.SetActive(false);
     }
 
-    public void newGame()
+    public void playEasy()
     {
+        PlayerPrefs.SetInt("dificulty", 1);
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    public void playMedium()
+    {
+        PlayerPrefs.SetInt("dificulty", 2);
+        SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    public void playHard()
+    {
+        PlayerPrefs.SetInt("dificulty", 3);
+        SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    public void changeLights()
+    {
+        generator.changeLights();
     }
 
     public void clear()
@@ -39,5 +57,15 @@ public class UIButtons : MonoBehaviour
     public void toStart()
     {
         SceneManager.LoadScene("Start", LoadSceneMode.Single);
+    }
+
+    public void fontFabricHyperlink()
+    {
+        Application.OpenURL("https://www.fontfabric.com/");
+    }
+
+    public void cakeDevHyperlink()
+    {
+        Application.OpenURL("https://twitter.com/cakeslice_dev");
     }
 }
