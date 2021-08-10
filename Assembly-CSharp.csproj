@@ -72,9 +72,13 @@
     <Compile Include="Assets\Scripts\Intersection.cs" />
     <Compile Include="Assets\Scripts\Island.cs" />
     <Compile Include="Assets\Scripts\PositionGrid.cs" />
+    <Compile Include="Assets\Scripts\RecordSetter.cs" />
+    <Compile Include="Assets\Scripts\TimeCount.cs" />
     <Compile Include="Assets\Scripts\TouchManager.cs" />
+    <Compile Include="Assets\Scripts\Tuto.cs" />
     <Compile Include="Assets\Scripts\TwoRaccoons.cs" />
     <Compile Include="Assets\Scripts\UIButtons.cs" />
+    <Compile Include="Assets\Scripts\UpdateVictories.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />

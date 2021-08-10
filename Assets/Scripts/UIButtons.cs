@@ -10,14 +10,18 @@ public class UIButtons : MonoBehaviour
 
     public Generator generator;
 
+    public Tuto Tuto;
+
     public void openMenu()
     {
         panel.SetActive(true);
+        Time.timeScale = 0;
     }
 
     public void closeMenu()
     {
         panel.SetActive(false);
+        Time.timeScale = 1;
     }
 
     public void playEasy()
@@ -36,6 +40,31 @@ public class UIButtons : MonoBehaviour
     {
         PlayerPrefs.SetInt("dificulty", 3);
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    public void playTutorial()
+    {
+        PlayerPrefs.SetInt("dificulty", 4);
+        SceneManager.LoadScene("Tuto", LoadSceneMode.Single);
+    }
+
+    public void playAgain()
+    {
+        switch(PlayerPrefs.GetInt("dificulty"))
+        {
+            case 1:
+                playEasy();
+                break;
+            case 2:
+                playMedium();
+                break;
+            case 3:
+                playHard();
+                break;
+            default:
+                Debug.LogError("Wrong Dificulty in playAgain()");
+                break;
+        }
     }
 
     public void changeLights()
@@ -57,6 +86,7 @@ public class UIButtons : MonoBehaviour
     public void toStart()
     {
         SceneManager.LoadScene("Start", LoadSceneMode.Single);
+        Time.timeScale = 1;
     }
 
     public void fontFabricHyperlink()
@@ -67,5 +97,15 @@ public class UIButtons : MonoBehaviour
     public void cakeDevHyperlink()
     {
         Application.OpenURL("https://twitter.com/cakeslice_dev");
+    }
+
+    public void moveTutoRight()
+    {
+        Tuto.moveTutoRight();
+    }
+
+    public void moveTutoLeft()
+    {
+        Tuto.moveTutoLeft();
     }
 }

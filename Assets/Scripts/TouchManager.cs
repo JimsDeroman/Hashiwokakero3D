@@ -24,13 +24,15 @@ public class TouchManager : MonoBehaviour
 
     void Update()
     {
-        //mouseUpdate();
+        mouseUpdate();
         touchUpdate();
     }
 
     // Finished! Sloppy, but works
     private void mouseUpdate()
     {
+        grid = generator.getGrid();
+
         Ray ray;
         RaycastHit hit;
 
@@ -68,14 +70,18 @@ public class TouchManager : MonoBehaviour
                             Debug.Log("X paralel");
                             axis = 1;
                             int aux = Int32.Parse(sCoordinatesA[0] + ""), end = Int32.Parse(sCoordinatesB[0] + "");
+                            Debug.Log("AUX:" + aux + " END: " + end);
                             if (end > aux)
                             {
                                 aux++;
                                 while (end > aux)
                                 {
+                                    Debug.Log("There is a distance of 2 at least");
                                     if (!grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isEmptY())
                                     {
-                                        able = false;
+                                        Debug.Log("No esta vacio");
+                                        Debug.Log("Has bridge:" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isBridged());
+                                        Debug.Log("Has island in " + aux + " " + sCoordinatesA[1] + " " + sCoordinatesA[2] + ":" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).hasIsland()); able = false;
                                     }
                                     aux++;
                                 }
@@ -85,8 +91,12 @@ public class TouchManager : MonoBehaviour
                                 aux--;
                                 while (end < aux)
                                 {
+                                    Debug.Log("There is a distance of 2 at least");
                                     if (!grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isEmptY())
                                     {
+                                        Debug.Log("No esta vacio");
+                                        Debug.Log("Has bridge:" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isBridged());
+                                        Debug.Log("Has island in " + aux + " " + sCoordinatesA[1] + " " + sCoordinatesA[2] + ":" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).hasIsland()); able = false;
                                         able = false;
                                     }
                                     aux--;
@@ -105,6 +115,7 @@ public class TouchManager : MonoBehaviour
                                 {
                                     if (!grid.getIntersection(Int32.Parse(sCoordinatesA[0] + ""), aux, Int32.Parse(sCoordinatesA[2] + "")).isEmptY())
                                     {
+                                        Debug.Log("Has island:" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isEmptY());
                                         able = false;
                                     }
                                     aux++;
@@ -117,6 +128,7 @@ public class TouchManager : MonoBehaviour
                                 {
                                     if (!grid.getIntersection(Int32.Parse(sCoordinatesA[0] + ""), aux, Int32.Parse(sCoordinatesA[2] + "")).isEmptY())
                                     {
+                                        Debug.Log("Has island:" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isEmptY());
                                         able = false;
                                     }
                                     aux--;
@@ -135,6 +147,7 @@ public class TouchManager : MonoBehaviour
                                 {
                                     if (!grid.getIntersection(Int32.Parse(sCoordinatesA[0] + ""), Int32.Parse(sCoordinatesA[1] + ""), aux).isEmptY())
                                     {
+                                        Debug.Log("Has island:" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isEmptY());
                                         able = false;
                                     }
                                     aux++;
@@ -147,6 +160,7 @@ public class TouchManager : MonoBehaviour
                                 {
                                     if (!grid.getIntersection(Int32.Parse(sCoordinatesA[0] + ""), Int32.Parse(sCoordinatesA[1] + ""), aux).isEmptY())
                                     {
+                                        Debug.Log("Has island:" + grid.getIntersection(aux, Int32.Parse(sCoordinatesA[1] + ""), Int32.Parse(sCoordinatesA[2] + "")).isEmptY());
                                         able = false;
                                     }
                                     aux--;

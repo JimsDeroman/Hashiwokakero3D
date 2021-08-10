@@ -21,7 +21,7 @@ public class Generator : MonoBehaviour
 
     public GameObject line, BridgeLines;
 
-    public GameObject VictoryPanel;
+    public GameObject VictoryPanel, NewRecord;
 
     public Text notInterconnectedWarning;
 
@@ -35,8 +35,9 @@ public class Generator : MonoBehaviour
 
     public void Awake()
     {
-        if (PlayerPrefs.GetInt("lights") == 0) lights = false;
-        else lights = true;
+        Time.timeScale = 1;
+        if (PlayerPrefs.GetInt("lights") == 0) lights = true;
+        else lights = false;
         setLights();
         init();
         StartCoroutine(closeLoadingPanel());
@@ -86,6 +87,9 @@ public class Generator : MonoBehaviour
                 break;
             case 3:
                 generateHard();
+                break;
+            case 4:
+                generateTutorial();
                 break;
             default:
                 Debug.LogError("Wrong difficulty sent (PlayerPrefs)");
@@ -148,6 +152,67 @@ public class Generator : MonoBehaviour
         if (islandNum < 23) SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
+    public void generateTutorial()
+    {
+        bridgeList = new List<Bridge>();
+        Bridge auxBridge;
+        Island auxIslandA, auxIslandB;
+
+        // Need to change this to set the bridgeNum and the island (object) and island (block) like in 0, 0, 0
+
+        grid.getIntersection(0, 0, 0).placeIsland();
+        PositionGrid.GetComponent<PositionGrid>().setIsland(0, 0, 0);
+
+        grid.getIntersection(0, 0, 1).placeIsland();
+        PositionGrid.GetComponent<PositionGrid>().setIsland(0, 0, 1);
+
+        grid.getIntersection(0, 0, 2).placeIsland();
+        PositionGrid.GetComponent<PositionGrid>().setIsland(0, 0, 2);
+
+        grid.getIntersection(0, 2, 0).placeIsland();
+        PositionGrid.GetComponent<PositionGrid>().setIsland(0, 2, 0);
+
+        grid.getIntersection(1, 0, 1).placeIsland();
+        PositionGrid.GetComponent<PositionGrid>().setIsland(1, 0, 1);
+
+        auxIslandA = grid.getIntersection(0, 0, 0).getIsland();
+        auxIslandB = grid.getIntersection(0, 0, 1).getIsland();
+        auxBridge = new Bridge(2, auxIslandA, auxIslandB, false);
+
+        bridgeList.Add(auxBridge);
+        auxIslandA.addBridge(auxBridge);
+        auxIslandB.addBridge(auxBridge);
+
+        auxIslandA = grid.getIntersection(0, 0, 1).getIsland();
+        auxIslandB = grid.getIntersection(0, 0, 2).getIsland();
+        auxBridge = new Bridge(2, auxIslandA, auxIslandB, false);
+
+        bridgeList.Add(auxBridge);
+        auxIslandA.addBridge(auxBridge);
+        auxIslandB.addBridge(auxBridge);
+
+        auxIslandA = grid.getIntersection(0, 0, 1).getIsland();
+        auxIslandB = grid.getIntersection(1, 0, 1).getIsland();
+        auxBridge = new Bridge(1, auxIslandA, auxIslandB, true);
+
+        bridgeList.Add(auxBridge);
+        auxIslandA.addBridge(auxBridge);
+        auxIslandB.addBridge(auxBridge);
+
+        auxIslandA = grid.getIntersection(0, 2, 0).getIsland();
+        auxIslandB = grid.getIntersection(0, 0, 0).getIsland();
+        auxBridge = new Bridge(2, auxIslandA, auxIslandB, false);
+
+        bridgeList.Add(auxBridge);
+        auxIslandA.addBridge(auxBridge);
+        auxIslandB.addBridge(auxBridge);
+
+        printAllBridges();
+        calculateNeededBridges();
+        unprintAllBridges();
+        deleteAllBridges();
+    }
+
     public void generate()
     {
         // Island num init
@@ -204,8 +269,6 @@ public class Generator : MonoBehaviour
         Debug.Log("A tomar por culo los bridges");
 
         // Y ya debería estar. Reza para debugear esta mierda. God bless pao
-
-
     }
 
     
@@ -671,6 +734,7 @@ public class Generator : MonoBehaviour
         {
             Destroy(g);
         }
+        check();
     }
 
     public void setDobleBridge(int index)
@@ -741,6 +805,50 @@ public class Generator : MonoBehaviour
             {
                 Debug.Log("Real victory");
                 VictoryPanel.SetActive(true);
+                int time = GameObject.Find("Canvas/TimeCounter").GetComponent<TimeCount>().getTimeInSeconds();
+                bool record = false;
+
+                // For the record, I need to set it first at 50 hours (for example)
+
+                switch (PlayerPrefs.GetInt("dificulty"))
+                {
+                    case 1:
+                        if (PlayerPrefs.GetInt("easyRecord") > time)
+                        {
+                            PlayerPrefs.SetInt("easyRecord", time);
+                            record = true;
+                        }
+                        PlayerPrefs.SetInt("easy", PlayerPrefs.GetInt("easy") + 1);
+                        break;
+                    case 2:
+                        if (PlayerPrefs.GetInt("mediumRecord") > time)
+                        {
+                            PlayerPrefs.SetInt("mediumRecord", time);
+                            record = true;
+                        }
+                        PlayerPrefs.SetInt("medium", PlayerPrefs.GetInt("medium") + 1);
+                        break;
+                    case 3:
+                        if (PlayerPrefs.GetInt("hardRecord") > time)
+                        {
+                            PlayerPrefs.SetInt("hardRecord", time);
+                            record = true;
+                        }
+                        PlayerPrefs.SetInt("hard", PlayerPrefs.GetInt("hard") + 1);
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        Debug.LogError("Wrong dificulty in Generator/victory");
+                        break;
+                }
+                if (record)
+                {
+                    NewRecord.SetActive(true);
+                }
+
+                //Deactivate the TouchManager??
+                GameObject.Find("TouchManager").SetActive(false);
             }
             else
             {
