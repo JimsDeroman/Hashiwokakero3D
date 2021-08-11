@@ -421,6 +421,8 @@ public class TouchManager : MonoBehaviour
 
     private void touchUpdate()
     {
+        grid = generator.getGrid();
+
         Ray ray;
         RaycastHit hit;
 
